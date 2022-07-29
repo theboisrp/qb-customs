@@ -35,11 +35,12 @@ RegisterNetEvent('qb-customs:server:attemptPurchase', function(type, upgradeLeve
     local balance = Player.Functions.GetMoney(moneyType)
 
     if type == "repair" then
-        local repairCost = RepairCosts[source] or 600
+        local repairCost = (RepairCosts[source] or 600) * 17
         moneyType = Config.RepairMoneyType
         balance = Player.Functions.GetMoney(moneyType)
         if balance >= repairCost then
             Player.Functions.RemoveMoney(moneyType, repairCost, "bennys")
+            TriggerEvent('logsystem:log', source, "Purchased repair upgrade ("..tostring(repairCost)..")")
             TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
 	exports['qb-management']:AddMoney("mechanic", repairCost)
         else
@@ -47,6 +48,7 @@ RegisterNetEvent('qb-customs:server:attemptPurchase', function(type, upgradeLeve
         end
     elseif type == "performance" or type == "turbo" then
         if balance >= vehicleCustomisationPrices[type].prices[upgradeLevel] then
+            TriggerEvent('logsystem:log', source, "Purchased bennys upgrade ("..tostring(vehicleCustomisationPrices[type].prices[upgradeLevel])..")")
             TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
             Player.Functions.RemoveMoney(moneyType, vehicleCustomisationPrices[type].prices[upgradeLevel], "bennys")
 	exports['qb-management']:AddMoney("mechanic", vehicleCustomisationPrices[type].prices[upgradeLevel])
@@ -55,6 +57,7 @@ RegisterNetEvent('qb-customs:server:attemptPurchase', function(type, upgradeLeve
         end
     else
         if balance >= vehicleCustomisationPrices[type].price then
+            TriggerEvent('logsystem:log', source, "Purchased car upgrade ("..tostring(vehicleCustomisationPrices[type].price)..")")
             TriggerClientEvent('qb-customs:client:purchaseSuccessful', source)
             Player.Functions.RemoveMoney(moneyType, vehicleCustomisationPrices[type].price, "bennys")
 	exports['qb-management']:AddMoney("mechanic", vehicleCustomisationPrices[type].price)
